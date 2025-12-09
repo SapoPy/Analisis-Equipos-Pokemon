@@ -1,0 +1,10 @@
+Koraidon @ Clear Amulet  
+Ability: Orichalcum Pulse  
+Level: 50  
+Tera Type: Fire  
+EVs: 100 HP / 196 Atk / 4 Def / 4 SpD / 204 Spe  
+Adamant Nature  
+- Flare Blitz  
+- Collision Course  
+- Flame Charge  
+- Protect  
