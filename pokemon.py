@@ -1,16 +1,3 @@
-
-class TeamPokemon():
-    def __init__(self) -> None:
-        self.pokemon = ""
-        self.teras = {}
-        self.usage = 0
-        self.moves = {}
-        self.teammates = {}
-        self.items = {}
-        self.abilities = {}
-        self.ev_spreads = {}
-        
-
 class Pokemon():
     def __init__(self) -> None:
         self.pokemon = ""
@@ -22,6 +9,35 @@ class Pokemon():
     
     def __str__(self) -> str:
         return f"{self.pokemon} @ {self.item}\nAbility: {self.ability}\nEVs: {self.ev_spread}\nMoves: {self.moves}"
+    
+class Team():
+    def __init__(self, paste: str = "") -> None:
+        self.name = paste
+        self.team = [] # lista de la clase Pokemon
+        if not paste ==  "":
+            self.make_team(paste)
+
+    def __str__(self) -> str:
+        txt = ""
+        for i in range(len(self.team)):
+            txt += "\n" + str(self.team[i]) + "\n"
+        return txt[1:len(txt)-1]
+
+    def __getitem__(self, idx: int) -> Pokemon:
+        return self.team[idx]
+
+    def make_team(self, paste: str) -> None:
+        with open(f"{paste}.txt", "r") as f:
+            texto = f.readlines()
+
+        last_i = 0
+        for i in range(len(texto)):
+            if texto[i] == "\n":
+                pokemon = Pokemon()
+                give_attr(pokemon, texto[last_i: i])
+                self.team.append(pokemon)
+                last_i = i+1
+
 
 def get_name_and_obj(linea: str) -> tuple:
     objeto = ""
@@ -30,53 +46,65 @@ def get_name_and_obj(linea: str) -> tuple:
     for i in range(len(linea)):
         if linea[i] == "@":
             objeto = linea[i+2:]
+            name = linea[:i-1]
             break
-        if linea[i] == " " and not found:
-            name = linea[:i]
-            found = True
-            
+
     return name, objeto[:len(objeto) - 3]
 
 def get_ability(linea: str):
     ability = linea[9:]
     return ability[:len(ability)- 3]
 
-
-with open("ejemplo1.txt", "r") as f:
-    texto = f.readlines()
-nombre = ""
-objeto = ""
-movimientos = []
-habilidad = ""
-ev_n = ""
-
-print(texto)
-
-pokemon = Pokemon()
-
-nombre, objeto= get_name_and_obj(texto[0])
-pokemon.pokemon = nombre
-pokemon.item = objeto
-print(nombre, objeto)
-
-
-habilidad = get_ability(texto[1])
-
-pokemon.ability = habilidad
-print(get_ability(texto[1]))
-
-
 def get_spread(linea1, linea2):
     nature = ""
+    spread = ""
     for i in range(len(linea2)):
         if linea2[i] == " ":
             nature = linea2[:i]
             break
-    return nature
+    
+    def search_stat(stat:str, linea: str) -> str:
+        elemntos = linea.split()
+        for i in range(len(elemntos)):
+            if elemntos[i] == stat:
+                return elemntos[i-1]
+        return "0"
+    spread += nature + " " + search_stat("HP", linea1) +"/" + search_stat("Atk", linea1)+"/" + search_stat("Def", linea1)+"/" + search_stat("SpA", linea1)+"/"+ search_stat("SpD", linea1) +"/"+ search_stat("Spe", linea1)
+    
+    return spread
 
-print("sas")
-print(texto[4])
-print(texto[5])
-print(get_spread(texto[4], texto[5]))
+def get_moveset(lineas):
+    moveset = []
+    for linea in lineas:
+        filtrado = linea[2:]
+        filtrado = filtrado[:len(filtrado)-3]
+        moveset.append(filtrado)
+    return moveset
 
-print(pokemon)
+def give_attr(pokemon, paste):
+    nombre, objeto= get_name_and_obj(paste[0])
+    pokemon.pokemon = nombre
+    pokemon.item = objeto
+
+    habilidad = get_ability(paste[1])
+
+    pokemon.ability = habilidad
+
+
+
+
+
+    spread = get_spread(paste[4], paste[5])
+
+    pokemon.ev_spread = spread
+
+    moves = paste[-4:]
+
+    moveset = get_moveset(moves)
+    pokemon.moves = moveset
+
+
+if __name__ == "__main__":
+    team = Team("ejemplo")
+
+    print(team)
