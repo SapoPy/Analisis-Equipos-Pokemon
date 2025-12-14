@@ -21,14 +21,17 @@ class Meta():
                         pok = DistribucionPokemon(pok, regulation)
                         self.meta[pok.Name] = pok.get_dict()
                 
-        def save_json(self):
+        def save_json(self) -> None:
+                """
+                Guarda en un json los datos de Meta
+                """
                 with open("Meta"+self.regulation + ".json", "w", encoding="utf-8") as f:
                         json.dump(self.meta, f, indent=4, ensure_ascii=False)
                         print("JSON generado con éxito.")
 
 class DistribucionPokemon():
         def __init__(self, Name, regulation) -> None:
-                if Name == "Others":
+                if Name == "Other":
                         self.Name = Name
                         self.prob = self.get_prob(regulation)
                         self.soup = ""
@@ -106,7 +109,7 @@ class DistribucionPokemon():
                                 EV = EV.replace("\n"," ").split(" ")
                                 EVs[EV[1] +" "+ EV[2]] = float(EV[3].replace("%", ""))/100
                 if sum(EVs.values()) < 1:
-                        EVs["Others"] = 1 - sum(EVs.values())
+                        EVs["Other"] = 1 - sum(EVs.values())
                 return EVs
         def get_abilities(self) -> dict:
                 abilities = {}
@@ -117,7 +120,7 @@ class DistribucionPokemon():
                                         perc = float(ab.split("\n")[1].replace("%",""))/100
                                         abilities[ability] = perc
                                 except:
-                                        abilities["Others"] = 1
+                                        abilities["Other"] = 1
                 return abilities
         def get_item(self) -> dict:
                 items = {}
@@ -150,15 +153,15 @@ class DistribucionPokemon():
                         print(f"Aparentemento no convergio la entropia para los movimientos, es posible que el pokemon {self.Name} se haya jugado sin los 4 movimientos")
                 return total_entropy
         def get_dict(self) -> dict:
-                dict = {}
-                dict["Prob"]        =  self.prob
-                dict["Moves"]       =  self.moves
-                dict["TeamMates"]   =  self.teammates
-                dict["Evs Spreads"] =  self.evs_spread
-                dict["Abilities"]   =  self.abilities
-                dict["Items"]       =  self.items
-                dict["Entropy"]     =  self.entropy
-                return dict
+                data = {}
+                data["Prob"]        =  self.prob
+                data["Moves"]       =  self.moves
+                data["TeamMates"]   =  self.teammates
+                data["Evs Spreads"] =  self.evs_spread
+                data["Abilities"]   =  self.abilities
+                data["Items"]       =  self.items
+                data["Entropy"]     =  self.entropy
+                return data
 
 if __name__ == "__main__":
 

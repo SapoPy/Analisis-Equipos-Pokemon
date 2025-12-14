@@ -4,7 +4,6 @@ import json
 import time
 from collections import Counter
 from main import * 
-# expected_inclusions, fit_weights_from_marginals, entropy_from_weights
 
 def sample_team_indices_from_w(weights, k):
     w = np.maximum(weights, 1e-300)

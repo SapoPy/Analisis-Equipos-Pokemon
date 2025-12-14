@@ -1,9 +1,15 @@
 import numpy as np
 
 def information(p):
+    """
+    Calcula la informacion de p
+    """
     return -np.log(p)
 
 def entropy(p: float, eps=1e-12) -> float:
+    """
+    Calcula la entropia de p
+    """
     if p <= eps or p >= 1:
         return 0.0
     else:

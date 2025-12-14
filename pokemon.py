@@ -90,10 +90,6 @@ def give_attr(pokemon, paste):
 
     pokemon.ability = habilidad
 
-
-
-
-
     spread = get_spread(paste[4], paste[5])
 
     pokemon.ev_spread = spread
