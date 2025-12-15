@@ -24,9 +24,15 @@ class Team():
         return txt[1:len(txt)-1]
 
     def __getitem__(self, idx: int) -> Pokemon:
+        """
+        Entrega ak pokemon en el indice idx
+        """
         return self.team[idx]
 
     def make_team(self, paste: str) -> None:
+        """
+        Añade a al atributo team el equipo del paste, el paste es el texto en el formato de showdown
+        """        
         with open(f"{paste}.txt", "r") as f:
             texto = f.readlines()
 
@@ -40,6 +46,9 @@ class Team():
 
 
 def get_name_and_obj(linea: str) -> tuple:
+    """
+    Entrega el nombre del pokemon y el objeto en linea
+    """
     objeto = ""
     name = ""
     found = False
@@ -51,11 +60,17 @@ def get_name_and_obj(linea: str) -> tuple:
 
     return name, objeto[:len(objeto) - 3]
 
-def get_ability(linea: str):
+def get_ability(linea: str) -> str:
+    """
+    Entrega la habilidad en linea
+    """
     ability = linea[9:]
     return ability[:len(ability)- 3]
 
 def get_spread(linea1, linea2):
+    """
+    Entrega el EV spread y naturaleza en el formato Nature HP/Atk/Def/SpA/SpD/Spe
+    """    
     nature = ""
     spread = ""
     for i in range(len(linea2)):
@@ -73,7 +88,10 @@ def get_spread(linea1, linea2):
     
     return spread
 
-def get_moveset(lineas):
+def get_moveset(lineas: list) -> list:
+    """
+    Entrega el moveset en una lista
+    """
     moveset = []
     for linea in lineas:
         filtrado = linea[2:]
@@ -81,21 +99,21 @@ def get_moveset(lineas):
         moveset.append(filtrado)
     return moveset
 
-def give_attr(pokemon, paste):
+def give_attr(pokemon: Pokemon, paste: list) -> None:
+    """
+    Asigna todos los atributos que le corresponden a un pokemon dado un 
+    """    
     nombre, objeto= get_name_and_obj(paste[0])
     pokemon.pokemon = nombre
     pokemon.item = objeto
 
     habilidad = get_ability(paste[1])
-
     pokemon.ability = habilidad
 
     spread = get_spread(paste[4], paste[5])
-
     pokemon.ev_spread = spread
 
     moves = paste[-4:]
-
     moveset = get_moveset(moves)
     pokemon.moves = moveset
 

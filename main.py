@@ -5,15 +5,10 @@ import numpy as np
 import json
 from entropia_k_elementos import *
 
-
-
-# EJEMPLO DE USO:
 if __name__ == "__main__":
-    with open("usos.json", "r", encoding="utf-8") as f:
+    with open("gen9vgc2025regh.json", "r", encoding="utf-8") as f:
         usos_cargados = json.load(f)    
 
-    # Ejemplo: supongamos tienes N pokes con probabilidades de inclusión p_i (suman ~k)
-    # Aqui p_target es la prob. de aparecer en un equipo de k=6 (ejemplo ficticio).
     p_target = np.array(list(usos_cargados.values()))
     K = 6
     # Asegúrate de que sum(p_target) is roughly K; si no, revisa tus datos.
@@ -29,6 +24,15 @@ if __name__ == "__main__":
 
     # Calcular entropía (nats). Si quieres bits, dividir por ln(2).
     H_nats = entropy_from_weights(w, K, p_model=p_model)
-    H_bits = H_nats / np.log(2)
     print("Entropía H (nats):", H_nats)
-    print("Entropía H (bits):", H_bits)
+
+    with open("Metagen9vgc2025regh.json", "r", encoding="utf-8") as f:
+        meta = json.load(f) 
+    
+    H_interna = 0
+    for pokemon in meta:
+        H_interna += meta[pokemon]["Prob"] * meta[pokemon]["Entropy"]
+    
+    print("Entropía interna promedio (nats):", H_interna)
+
+    print("Entropía total:", (H_nats + H_interna)/np.log(6))
