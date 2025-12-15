@@ -165,9 +165,9 @@ class DistribucionPokemon():
 
 if __name__ == "__main__":
 
-        REGULATION = "gen9vgc2025regh"
+        REGULATION = "gen9vgc2025regj"
 
-        pokemon = "Klefki"
+        pokemon = "Iron Crown"
 
         datos = requests.get(f"https://www.pikalytics.com/pokedex/{REGULATION}/{pokemon.lower()}").text
 

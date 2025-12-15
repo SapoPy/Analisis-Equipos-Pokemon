@@ -18,6 +18,7 @@ def make_dist(ARCHIVO_HTML: str) -> dict:
 
     for ent in entries:
         nombre = ent.get("data-name", "").strip()
+        nombre = nombre.replace("%20", " ")
         if not nombre:
             continue
 
@@ -44,8 +45,8 @@ def save_dist(dict_json: dict, save_output: str):
         print("JSON generado con éxito.")
 
 if __name__ == "__main__":
-    ARCHIVO_HTML = "gen9vgc2025regh.txt"
-    OUTPUT_JSON = "gen9vgc2025regh.json"
+    ARCHIVO_HTML = "gen9vgc2025regj.txt"
+    OUTPUT_JSON = "gen9vgc2025regj.json"
     usos = make_dist(ARCHIVO_HTML)
     print(usos)
 
